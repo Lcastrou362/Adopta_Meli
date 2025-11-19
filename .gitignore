@@ -1,0 +1,7 @@
+modelos/conexionBD.php
+
+# Archivos temporales
+*.log
+
+# Carpetas de configuración local
+.vscode/

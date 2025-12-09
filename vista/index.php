@@ -1,4 +1,5 @@
 <?php
+session_start();
 require_once '../modelos/conexionBD.php';
 
 // Obtener todas las mascotas disponibles
@@ -25,11 +26,10 @@ $mascotas = $stmt->fetchAll(PDO::FETCH_ASSOC);
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <title>Adopta una Mascota</title>
+    <title>AdoptaMeli</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
 
     <style>
-        /* FONDO: OJO, assets está DENTRO de vista */
         body {
             background-image: url('assets/img/fondo_mascotas.png');
             background-size: cover;
@@ -69,6 +69,67 @@ $mascotas = $stmt->fetchAll(PDO::FETCH_ASSOC);
 </head>
 <body>
 
+<!-- NAVBAR -->
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+  <div class="container-fluid">
+
+    <a class="navbar-brand" href="index.php">AdoptaMeli</a>
+
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="navbarNav">
+
+      <ul class="navbar-nav ms-auto">
+
+        <!-- Inicio siempre visible -->
+        <li class="nav-item">
+          <a class="nav-link" href="index.php">Inicio</a>
+        </li>
+
+        <?php if (!isset($_SESSION['id_usuario'])): ?>
+            <!-- Usuario NO logueado -->
+            <li class="nav-item">
+              <a class="nav-link" href="registro_usuario.php">Registrarse</a>
+            </li>
+
+            <li class="nav-item">
+              <a class="nav-link" href="login.php">Iniciar Sesión</a>
+            </li>
+
+        <?php else: ?>
+
+            <!-- Mostrar saludo -->
+            <li class="nav-item">
+              <span class="navbar-text me-2 text-white">
+                Hola, <?php echo htmlspecialchars($_SESSION['usuario']); ?>
+              </span>
+            </li>
+
+            <!-- ADMIN o REFUGIO_ADM -->
+            <?php if ($_SESSION['rol'] === 'ADMIN' || $_SESSION['rol'] === 'REFUGIO_ADM'): ?>
+                <li class="nav-item">
+                  <a class="nav-link" href="nueva_mascota.php">Registrar Mascota</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="solicitudes_pendientes.php">Solicitudes</a>
+                </li>
+            <?php endif; ?>
+
+            <!-- Cerrar sesión -->
+            <li class="nav-item">
+              <a class="nav-link" href="../controladores/LogoutController.php">Cerrar Sesión</a>
+            </li>
+
+        <?php endif; ?>
+
+      </ul>
+    </div>
+  </div>
+</nav>
+
+<!-- CONTENIDO -->
 <div class="overlay">
     <div class="container mt-4">
         <h1 class="titulo">🐶🐱 Mascotas Disponibles para Adopción</h1>
@@ -85,7 +146,7 @@ $mascotas = $stmt->fetchAll(PDO::FETCH_ASSOC);
                 <div class="col-md-4">
                     <div class="card">
 
-                        <!-- Mostrar imagen desde BLOB -->
+                        <!-- Mostrar imagen -->
                         <?php if (!empty($m['foto'])): ?>
                             <img src="mostrar_foto.php?id=<?php echo $m['id_mascota']; ?>" class="card-img-top">
                         <?php else: ?>
@@ -105,7 +166,34 @@ $mascotas = $stmt->fetchAll(PDO::FETCH_ASSOC);
                                 <strong>Refugio:</strong> <?php echo $m['nombre_institucion']; ?>
                             </p>
 
-                            <a href="#" class="btn btn-primary w-100">Ver más detalles</a>
+                            <!-- BOTÓN SEGÚN ROL -->
+                            <?php
+                            if (!isset($_SESSION['id_usuario'])) {
+                                // Sin sesión → debe iniciar sesión
+                            ?>
+                                <a href="login.php" class="btn btn-primary w-100">
+                                    Inicia sesión para adoptar
+                                </a>
+                            <?php
+                            } else {
+
+                                if ($_SESSION['rol'] === 'ADOPTANTE' || $_SESSION['rol'] === 'ADMIN') {
+                            ?>
+                                    <a href="formulario_adopcion.php?id_mascota=<?php echo $m['id_mascota']; ?>" 
+                                       class="btn btn-success w-100">
+                                       Solicitar adopción
+                                    </a>
+                            <?php
+                                }
+                                else if ($_SESSION['rol'] === 'REFUGIO_ADM') {
+                            ?>
+                                    <button class="btn btn-secondary w-100" disabled>
+                                        Solo adoptantes pueden adoptar
+                                    </button>
+                            <?php
+                                }
+                            }
+                            ?>
                         </div>
                     </div>
                 </div>
@@ -114,6 +202,8 @@ $mascotas = $stmt->fetchAll(PDO::FETCH_ASSOC);
         </div>
     </div>
 </div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 
 </body>
 </html>

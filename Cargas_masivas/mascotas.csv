@@ -1,0 +1,11 @@
+nombre,tipo,raza,edad,tamano,descripcion,foto,id_institucion
+Max,Perro,Labrador,2 años,Mediano,"Perro muy sociable, le encanta jugar con niños y otros perros.",max.jpeg,1
+Mia,Gato,Siames,3 años,Pequeño,"Gata cariñosa y conversadora, busca un hogar tranquilo.",mia.jpeg,1
+Toby,Perro,Beagle,4 años,Mediano,"Curioso y activo, ideal para personas que disfruten de paseos diarios.",tobi.jpeg,1
+Rocky,Perro,Mestizo,5 años,Grande,"Perro rescatado, muy noble y obediente, se lleva bien con otros perros.",rocky.jpeg,1
+Nala,Perro,Golden Retriever,2 años,Grande,"Extremadamente cariñosa y paciente, perfecta para familia con niños.",nala.jpeg,1
+Simba,Gato,Europeo,2 años,Pequeño,"Gato juguetón y curioso, se adapta bien a departamentos.",simba.jpeg,1
+Bruno,Perro,Pug,3 años,Pequeño,"Tranquilo y regalón, prefiere estar acompañado en casa.",bruno.jpeg,1
+Lola,Gato,Persa,5 años,Pequeño,"Gata calmada, ideal para hogar sin mucho ruido.",lola.jpeg,1
+Coco,Gato,Mestizo,1 año,Pequeño,"Muy sociable, se lleva bien con otros gatos y personas.",coco.jpeg,1
+Balto,Perro,Husky Siberiano,3 años,Grande,"Perro enérgico, necesita ejercicio diario y espacio para correr.",balto.jpeg,1
